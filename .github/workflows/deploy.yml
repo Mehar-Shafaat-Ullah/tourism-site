@@ -7,7 +7,7 @@ on:
 
 jobs:
   deploy:
-    runs-on: second_runner
+    runs-on: self_hosted
 
     env:
       BLUE_CONTAINER: tourism-blue
