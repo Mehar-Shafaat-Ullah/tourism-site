@@ -39,14 +39,14 @@ jobs:
           docker stop tourism-${INACTIVE} || true
           docker rm tourism-${INACTIVE} || true
 
-      - name: Run inactive container on port 8089
+      - name: Run inactive container on port 8090
         run: |
-          docker run -d --name tourism-${INACTIVE} -p 8089:80 $IMAGE_NAME
+          docker run -d --name tourism-${INACTIVE} -p 8090:80 $IMAGE_NAME
 
       - name: Health check (optional)
         run: |
           sleep 5
-          curl -f http://localhost:8089 || (echo "Health check failed" && exit 1)
+          curl -f http://localhost:8090 || (echo "Health check failed" && exit 1)
 
       - name: Swap NGINX to point to new container
         run: |
