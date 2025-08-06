@@ -7,7 +7,7 @@ on:
 
 jobs:
   deploy:
-    runs-on: [self-hosted, second_runner]
+    runs-on: self-hosted
 
 
     env:
