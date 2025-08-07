@@ -1,0 +1,50 @@
+name: Blue-Green Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    - name: Choose Free Port
+      id: choose-port
+      run: |
+        if docker ps | grep tourism-green; then
+          echo "PORT=8082" >> $GITHUB_ENV
+          echo "APP_NAME=tourism-blue" >> $GITHUB_ENV
+        else
+          echo "PORT=8081" >> $GITHUB_ENV
+          echo "APP_NAME=tourism-green" >> $GITHUB_ENV
+        fi
+
+    - name: Build New Version
+      run: |
+        docker build -t $APP_NAME .
+
+    - name: Run New Version
+      run: |
+        docker stop $APP_NAME || true
+        docker rm $APP_NAME || true
+        docker run -d --name $APP_NAME -p $PORT:80 $APP_NAME
+
+    - name: Update NGINX Config
+      run: |
+        sudo sed -i "s|proxy_pass http://localhost:[0-9]\+/|proxy_pass http://localhost:$PORT/|" /etc/nginx/conf.d/tourism.conf
+        sudo nginx -s reload
+
+    - name: Remove Old Container
+      run: |
+        if [ "$APP_NAME" = "tourism-green" ]; then
+          docker stop tourism-blue || true
+          docker rm tourism-blue || true
+        else
+          docker stop tourism-green || true
+          docker rm tourism-green || true
+        fi
