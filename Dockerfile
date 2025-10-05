@@ -1,6 +1,4 @@
-# FROM nginx:apline
-
-# RUN rm -rf /usr/share/nginx/html/* 
+ 
 
 # COPY 
 
