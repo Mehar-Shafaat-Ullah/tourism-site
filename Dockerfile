@@ -1,8 +1,4 @@
- 
 
-# COPY 
-
-# Use lightweight Nginx image
 FROM nginx:alpine
 
 # Clean default Nginx web page
