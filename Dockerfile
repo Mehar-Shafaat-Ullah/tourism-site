@@ -2,10 +2,7 @@
 
 # RUN rm -rf /usr/share/nginx/html/* 
 
-# COPY . /usr/share/nginx/html/
-
-
-# EXPOSE 80
+# COPY 
 
 # Use lightweight Nginx image
 FROM nginx:alpine
